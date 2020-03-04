@@ -1,5 +1,7 @@
 package data
 
+import "math"
+
 type TransactionResult int16
 
 const (
@@ -10,6 +12,8 @@ const (
 	// - Applied
 	// - Forwarded
 	tesSUCCESS TransactionResult = 0
+
+	tesUNKNOWN_TYPE TransactionResult = math.MaxInt16
 )
 const (
 	// 100 .. 159 C Claim fee only (ripple transaction with no good paths, pay to non-existent account, no path)
@@ -304,6 +308,8 @@ var resultNames = map[TransactionResult]struct {
 	terPRE_SEQ:     {"terPRE_SEQ", "Missing/inapplicable prior transaction."},
 	terOWNERS:      {"terOWNERS", "Non-zero owner count."},
 	terQUEUED:      {"terQUEUED", "Held until escalated fee drops."},
+
+	tesUNKNOWN_TYPE: {"terUNKNOW_TYPE", "Tx type is unknow."},
 }
 
 var reverseResults map[string]TransactionResult

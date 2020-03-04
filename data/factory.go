@@ -1,5 +1,7 @@
 package data
 
+import "math"
+
 // Horrible look up tables
 // Could all this be one big map?
 
@@ -22,6 +24,8 @@ const (
 	CHECK            LedgerEntryType = 0x63 // 'C'
 	DEPOSIT_PRE_AUTH LedgerEntryType = 0x70 // 'p'
 
+	UNKNOW_LEDGER_TYPE LedgerEntryType = math.MaxUint16 - 1
+
 	// TransactionType values come from rippled's "TxFormats.h"
 	PAYMENT         TransactionType = 0
 	ESCROW_CREATE   TransactionType = 1
@@ -43,6 +47,8 @@ const (
 	TRUST_SET       TransactionType = 20
 	AMENDMENT       TransactionType = 100
 	SET_FEE         TransactionType = 101
+
+	UNKNOW_TX_TYPE TransactionType = math.MaxUint16
 )
 
 var LedgerFactory = [...]func() Hashable{
@@ -63,6 +69,8 @@ var LedgerEntryFactory = [...]func() LedgerEntry{
 	PAY_CHANNEL:      func() LedgerEntry { return &PayChannel{leBase: leBase{LedgerEntryType: PAY_CHANNEL}} },
 	CHECK:            func() LedgerEntry { return &Check{leBase: leBase{LedgerEntryType: CHECK}} },
 	DEPOSIT_PRE_AUTH: func() LedgerEntry { return &DepositPreAuth{leBase: leBase{LedgerEntryType: DEPOSIT_PRE_AUTH}} },
+
+	UNKNOW_LEDGER_TYPE: func() LedgerEntry { return &UnknowLedger{leBase: leBase{LedgerEntryType: UNKNOW_LEDGER_TYPE}} },
 }
 
 var TxFactory = [...]func() Transaction{
@@ -84,6 +92,7 @@ var TxFactory = [...]func() Transaction{
 	CHECK_CREATE:    func() Transaction { return &CheckCreate{TxBase: TxBase{TransactionType: CHECK_CREATE}} },
 	CHECK_CASH:      func() Transaction { return &CheckCash{TxBase: TxBase{TransactionType: CHECK_CASH}} },
 	CHECK_CANCEL:    func() Transaction { return &CheckCancel{TxBase: TxBase{TransactionType: CHECK_CANCEL}} },
+	UNKNOW_TX_TYPE:  func() Transaction { return &UnknowTx{TxBase: TxBase{TransactionType: UNKNOW_TX_TYPE}} },
 }
 
 var ledgerEntryNames = [...]string{
